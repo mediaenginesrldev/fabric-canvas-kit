@@ -1,0 +1,47 @@
+{
+  "name": "fabric-canvas-kit",
+  "version": "1.0.0",
+  "description": "Modern TypeScript wrapper for Fabric.js with RxJS event system, history management, and advanced canvas operations",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean"
+  },
+  "keywords": [
+    "fabric.js",
+    "canvas",
+    "rxjs",
+    "typescript",
+    "canvas-wrapper",
+    "history",
+    "undo-redo",
+    "serialization",
+    "export",
+    "image-export"
+  ],
+  "author": "Francesco Torresani",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/francesco-torresani-mediaengine/fabric-canvas-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/francesco-torresani-mediaengine/fabric-canvas-kit/issues"
+  },
+  "homepage": "https://github.com/francesco-torresani-mediaengine/fabric-canvas-kit#readme",
+  "dependencies": {
+    "fabric": "^6.9.0",
+    "hammerjs": "^2.0.8",
+    "rxjs": "^7.8.0"
+  },
+  "devDependencies": {
+    "@types/fabric": "^5.3.10",
+    "@types/hammerjs": "^2.0.45",
+    "@types/jsdom": "^27.0.0",
+    "typescript": "^5.2.0"
+  }
+}
