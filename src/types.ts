@@ -13,6 +13,7 @@ import {
   Line,
   Rect,
   TCrossOrigin,
+  Textbox,
   Triangle,
 } from 'fabric';
 
@@ -50,6 +51,11 @@ export type FabricLine = Line;
  * Fabric.js text type (interactive/editable)
  */
 export type FabricText = IText;
+
+/**
+ * Fabric.js textbox type (word-wrapping text)
+ */
+export type FabricTextbox = Textbox;
 
 /**
  * Fabric.js image type
@@ -184,6 +190,13 @@ export interface TextOptions extends ShapeOptions {
   underline?: boolean;
   textAlign?: 'left' | 'center' | 'right';
   lineHeight?: number;
+}
+
+/**
+ * Textbox options (word-wrapping text)
+ */
+export interface TextboxOptions extends TextOptions {
+  splitByGrapheme?: boolean; // false = word-level wrapping (default), true = character-level
 }
 
 /**

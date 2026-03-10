@@ -3,7 +3,7 @@
  * Provides methods for creating and formatting text on the canvas
  *
  */
-import { FabricCanvas, FabricText, TextOptions } from '../types';
+import { FabricCanvas, FabricText, FabricTextbox, TextOptions, TextboxOptions } from '../types';
 /**
  * Text Factory class
  * Handles creation and formatting of text objects
@@ -19,6 +19,13 @@ export declare class TextFactory {
      * @returns Created text object
      */
     add(content: string, options?: TextOptions): FabricText;
+    /**
+     * Adds a word-wrapping textbox to the canvas
+     * @param content - Text content
+     * @param options - Textbox options (requires width for word-wrap to take effect)
+     * @returns Created textbox object
+     */
+    addTextbox(content: string, options?: TextboxOptions): FabricTextbox;
     /**
      * Sets underline for text
      * @param text - Text object to modify

@@ -2,7 +2,7 @@
  * Core type definitions for Fabric Kit library
  * Provides type-safe wrappers around Fabric.js objects
  */
-import { Canvas, Circle, FabricImage as FabricImageClass, FabricObject as FabricObjectClass, Group, IText, Line, Rect, TCrossOrigin, Triangle } from 'fabric';
+import { Canvas, Circle, FabricImage as FabricImageClass, FabricObject as FabricObjectClass, Group, IText, Line, Rect, TCrossOrigin, Textbox, Triangle } from 'fabric';
 /**
  * Base Fabric.js object type wrapper
  */
@@ -31,6 +31,10 @@ export type FabricLine = Line;
  * Fabric.js text type (interactive/editable)
  */
 export type FabricText = IText;
+/**
+ * Fabric.js textbox type (word-wrapping text)
+ */
+export type FabricTextbox = Textbox;
 /**
  * Fabric.js image type
  */
@@ -152,6 +156,12 @@ export interface TextOptions extends ShapeOptions {
     underline?: boolean;
     textAlign?: 'left' | 'center' | 'right';
     lineHeight?: number;
+}
+/**
+ * Textbox options (word-wrapping text)
+ */
+export interface TextboxOptions extends TextOptions {
+    splitByGrapheme?: boolean;
 }
 /**
  * Image options

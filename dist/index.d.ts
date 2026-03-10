@@ -4,7 +4,7 @@
  */
 export { FabricCanvas } from './fabric-canvas';
 export { CanvasConfig, KeyboardConfig, MouseConfig, TouchConfig, HistoryConfig, OnChangeConfig, ZoomConfig, PerformanceConfig, DEFAULT_CANVAS_CONFIG, mergeConfig, } from './config';
-export { FabricObject, FabricCanvas as FabricCanvasType, FabricRectangle, FabricCircle, FabricTriangle, FabricLine, FabricText, FabricImage, FabricGroup, Point, Size, BoundingBox, ShapeOptions, RectangleOptions, SquareOptions, CircleOptions, TriangleOptions, LineOptions, ArrowOptions, TextOptions, ImageOptions, ImageFilter, SelectionEvent, HistoryState, SerializationOptions, CanvasJSON, ExportOptions, SVGOptions, PDFOptions, ZoomToFitOptions, ArrowKeyOptions, TouchPanOptions, CropOptions, AnimationProperties, AnimationOptions, ResponsiveOptions, EraserOptions, ObjectInspection, ObjectFilter, CustomObjectClass, } from './types';
+export { FabricObject, FabricCanvas as FabricCanvasType, FabricRectangle, FabricCircle, FabricTriangle, FabricLine, FabricText, FabricTextbox, FabricImage, FabricGroup, Point, Size, BoundingBox, ShapeOptions, RectangleOptions, SquareOptions, CircleOptions, TriangleOptions, LineOptions, ArrowOptions, TextOptions, TextboxOptions, ImageOptions, ImageFilter, SelectionEvent, HistoryState, SerializationOptions, CanvasJSON, ExportOptions, SVGOptions, PDFOptions, ZoomToFitOptions, ArrowKeyOptions, TouchPanOptions, CropOptions, AnimationProperties, AnimationOptions, ResponsiveOptions, EraserOptions, ObjectInspection, ObjectFilter, CustomObjectClass, } from './types';
 export { ShapeFactory } from './factories/shape-factory';
 export { TextFactory } from './factories/text-factory';
 export { ImageFactory } from './factories/image-factory';

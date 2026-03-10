@@ -4,9 +4,9 @@
  *
  */
 
-import { FabricCanvas, FabricText, TextOptions } from '../types';
+import { FabricCanvas, FabricText, FabricTextbox, TextOptions, TextboxOptions } from '../types';
 
-import { IText } from 'fabric';
+import { IText, Textbox } from 'fabric';
 import { setCustomProperties } from '../utilities/object-utilities';
 
 /**
@@ -62,6 +62,50 @@ export class TextFactory {
     }
 
     return text;
+  }
+
+  /**
+   * Adds a word-wrapping textbox to the canvas
+   * @param content - Text content
+   * @param options - Textbox options (requires width for word-wrap to take effect)
+   * @returns Created textbox object
+   */
+  addTextbox(content: string, options: TextboxOptions = {}): FabricTextbox {
+    const textbox = new Textbox(content, {
+      left: options.left ?? 100,
+      top: options.top ?? 100,
+      width: options.width ?? 300,
+      fontSize: options.fontSize ?? 24,
+      fontFamily: options.fontFamily ?? 'Arial',
+      fontWeight: options.fontWeight ?? 'normal',
+      fontStyle: (options.fontStyle ?? 'normal') as '' | 'normal' | 'italic' | 'oblique',
+      underline: options.underline ?? false,
+      fill: options.fill ?? '#000000',
+      stroke: options.stroke,
+      strokeWidth: options.strokeWidth ?? 0,
+      textAlign: options.textAlign ?? 'left',
+      lineHeight: options.lineHeight ?? 1,
+      opacity: options.opacity ?? 1,
+      angle: options.angle ?? 0,
+      scaleX: options.scaleX ?? 1,
+      scaleY: options.scaleY ?? 1,
+      selectable: options.selectable ?? true,
+      evented: options.evented ?? true,
+      splitByGrapheme: options.splitByGrapheme ?? false,
+    });
+
+    // Set custom properties
+    setCustomProperties(textbox, options);
+
+    this.canvas.add(textbox);
+    this.canvas.setActiveObject(textbox);
+    this.canvas.requestRenderAll();
+
+    if (this.debug) {
+      console.log('[FabricKit] Textbox added', textbox);
+    }
+
+    return textbox;
   }
 
   /**
