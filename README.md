@@ -15,9 +15,13 @@ Modern TypeScript wrapper for Fabric.js with RxJS event system, history manageme
 
 ## Installation
 
-```bash
-npm install fabric-canvas-kit
+This is a private package. Add it to your `package.json` via GitHub:
+
+```json
+"fabric-canvas-kit": "github:mediaenginesrldev/fabric-canvas-kit#v1.1.0"
 ```
+
+Then run `npm install`.
 
 ## Quick Start
 
@@ -43,8 +47,15 @@ canvas.shapes.addCircle({
   fill: 'blue',
 });
 
-// Add text
+// Add text (single line, no wrap)
 canvas.text.add('Hello World', {
+  fontSize: 24,
+  fill: '#000000',
+});
+
+// Add word-wrapping textbox
+canvas.text.addTextbox('Hello World', {
+  width: 400,
   fontSize: 24,
   fill: '#000000',
 });
@@ -80,15 +91,34 @@ canvas.shapes.addArrow(options);
 #### Text Factory
 
 ```typescript
+// Single-line editable text (IText)
 canvas.text.add(text, options);
-canvas.text.setFontSize(size);
-canvas.text.setFontFamily(family);
-canvas.text.setTextColor(color);
-canvas.text.setUnderline(enabled);
-canvas.text.alignLeft();
-canvas.text.alignCenter();
-canvas.text.alignRight();
+
+// Word-wrapping textbox (Textbox)
+canvas.text.addTextbox(text, options);  // requires width option
+
+// Formatting (works on both IText and Textbox)
+canvas.text.setFontSize(obj, size);
+canvas.text.setFontFamily(obj, family);
+canvas.text.setTextColor(obj, color);
+canvas.text.setUnderline(obj, enabled);
+canvas.text.setBold(obj, enabled);
+canvas.text.setItalic(obj, enabled);
+canvas.text.alignLeft(obj);
+canvas.text.alignCenter(obj);
+canvas.text.alignRight(obj);
+canvas.text.isBold(obj);
+canvas.text.isItalic(obj);
+canvas.text.isUnderlined(obj);
+canvas.text.getAlignment(obj);
 ```
+
+**`addTextbox` options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `width` | `number` | `300` | Wrap boundary width (required for wrapping to take effect) |
+| `splitByGrapheme` | `boolean` | `false` | `false` = word-level wrap, `true` = character-level wrap |
 
 #### Image Factory
 
@@ -337,12 +367,12 @@ const canvas = FabricCanvas.create('canvas-id', {
   },
 
   selectionStyle: {
-    transparentCorners: false, // Filled corners (default: FabricJS default)
-    cornerColor: '#FFFFFF', // Corner fill color
-    cornerStrokeColor: '#009dff', // Corner stroke color
-    cornerStyle: 'circle', // 'circle' or 'rect'
-    borderColor: '#009dff', // Selection border color
-    cornerSize: 13, // Corner size in pixels
+    transparentCorners: false,
+    cornerColor: '#FFFFFF',
+    cornerStrokeColor: '#009dff',
+    cornerStyle: 'circle',
+    borderColor: '#009dff',
+    cornerSize: 13,
   },
 
   readOnly: false,
@@ -351,57 +381,6 @@ const canvas = FabricCanvas.create('canvas-id', {
 ```
 
 ## Selection Style Configuration
-
-Control the appearance of object selection controls (corners and borders) globally for all objects:
-
-### Basic Usage
-
-```typescript
-const canvas = FabricCanvas.create('canvas-id', {
-  selectionStyle: {
-    transparentCorners: false, // Filled corners
-    cornerColor: '#FFFFFF', // Corner fill color
-    cornerStrokeColor: '#009dff', // Corner stroke color
-    cornerStyle: 'circle', // 'circle' or 'rect'
-    borderColor: '#009dff', // Selection border color
-    cornerSize: 13, // Corner size in pixels
-  },
-});
-
-// All objects automatically inherit these styles
-canvas.shapes.addRectangle({ width: 100, height: 100 });
-```
-
-### Runtime Updates
-
-Update selection styles after canvas initialization:
-
-```typescript
-canvas.updateSelectionStyle({
-  cornerColor: '#FF0000',
-  borderColor: '#FF0000',
-});
-
-// Only affects objects created AFTER this call
-canvas.shapes.addCircle({ radius: 50 }); // Has red corners
-```
-
-### Individual Object Override
-
-Individual objects can override the global defaults:
-
-```typescript
-const rect = canvas.shapes.addRectangle({ width: 100, height: 100 });
-
-// Override just for this object
-rect.set({
-  cornerColor: '#00FF00', // Green corners
-  borderColor: '#00FF00',
-});
-canvas.getRawCanvas().renderAll();
-```
-
-### Available Properties
 
 | Property             | Type                 | Description                               | Default          |
 | -------------------- | -------------------- | ----------------------------------------- | ---------------- |
@@ -420,14 +399,12 @@ canvas.getRawCanvas().renderAll();
 import { combineLatest } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 
-// Combine multiple events
 combineLatest([canvas.events.onObjectAdded(), canvas.events.onObjectRemoved()])
   .pipe(debounceTime(500))
   .subscribe(([added, removed]) => {
     console.log('Objects changed:', { added, removed });
   });
 
-// Filter specific events
 canvas.events
   .onSelectionChanged()
   .pipe(filter(event => event.selected.length > 0))
@@ -452,24 +429,9 @@ canvas.performance.batchUpdate(() => {
 });
 ```
 
-### Export with Cropping
-
-```typescript
-// Export specific area
-const png = await canvas.serialization.toPNG({
-  left: 100,
-  top: 100,
-  width: 400,
-  height: 300,
-  quality: 1,
-  multiplier: 2, // 2x resolution
-});
-```
-
 ### Access Raw Fabric.js Canvas
 
 ```typescript
-// For advanced Fabric.js operations
 const fabricCanvas = canvas.getRawCanvas();
 fabricCanvas.on('custom:event', handler);
 ```
@@ -477,146 +439,11 @@ fabricCanvas.on('custom:event', handler);
 ## Cleanup
 
 ```typescript
-// Always cleanup when done
 canvas.destroy();
 ```
 
 ## Requirements
 
-- **fabric**: ^5.3.0
+- **fabric**: ^6.9.0
 - **rxjs**: ^7.8.0
-- **TypeScript**: ^5.0.0 (for TypeScript projects)
-
-## Development Workflow
-
-This library is currently stored locally in `temp-lib/` until it has a proper npm repository.
-
-### Making Changes to the Library
-
-When you edit the library source code, follow this simple 2-step workflow:
-
-```bash
-# Step 1: Edit your library source files
-vim temp-lib/src/fabric-canvas.ts
-
-# Step 2: Rebuild the library (compile TypeScript)
-cd temp-lib
-npm run build
-cd ..
-
-# That's it! Changes are immediately available in your app
-# (no reinstall needed thanks to symlink)
-```
-
-**How it works:**
-
-- Your main project has: `node_modules/fabric-canvas-kit` → `../temp-lib` (symlink)
-- After rebuild, your app automatically sees the new compiled code
-- No need to run `npm install` again!
-
-### Library Structure
-
-```
-temp-lib/
-├── src/                    # TypeScript source files (edit these)
-├── dist/                   # Compiled JavaScript + types (auto-generated)
-├── node_modules/           # Library's own dependencies
-│   ├── fabric/
-│   ├── hammerjs/
-│   └── rxjs/
-├── package.json
-└── tsconfig.json
-```
-
-### First-Time Setup
-
-If you're setting up this library in a new project:
-
-```bash
-# In your project's package.json, add:
-{
-  "dependencies": {
-    "fabric-canvas-kit": "file:./temp-lib"
-  }
-}
-
-# Then install:
-npm install
-
-# This will:
-# 1. Create symlink: node_modules/fabric-canvas-kit → temp-lib
-# 2. Install temp-lib's dependencies into temp-lib/node_modules/
-```
-
-### Current Dependency Strategy
-
-The library uses **regular dependencies** (not peerDependencies), making it work exactly like a real npm package:
-
-```json
-{
-  "dependencies": {
-    "fabric": "^6.9.0",
-    "hammerjs": "^2.0.8",
-    "rxjs": "^7.8.0"
-  }
-}
-```
-
-**What this means:**
-
-- ✅ Library is self-contained with its own dependencies
-- ✅ Works identically to a published npm package
-- ✅ No manual dependency management needed
-- ✅ Fast workflow: edit → rebuild → done!
-
-### Alternative: Using PeerDependencies (Optional)
-
-If you want the library to share dependencies with the parent project (avoiding duplication), you can switch to peerDependencies:
-
-```json
-// temp-lib/package.json
-{
-  "peerDependencies": {
-    "fabric": "^6.9.0",
-    "hammerjs": "^2.0.8",
-    "rxjs": "^7.8.0"
-  },
-  "devDependencies": {
-    "fabric": "^6.9.0",
-    "hammerjs": "^2.0.8",
-    "rxjs": "^7.8.0",
-    "@types/fabric": "^5.3.10",
-    "@types/hammerjs": "^2.0.45",
-    "@types/jsdom": "^27.0.0",
-    "typescript": "^5.2.0"
-  }
-}
-```
-
-**Then:**
-
-1. Ensure parent project has fabric, hammerjs, rxjs in its dependencies
-2. Remove temp-lib/node_modules: `rm -rf temp-lib/node_modules`
-3. Reinstall: `npm install`
-
-**Pros:**
-
-- Shared dependencies (no duplication)
-- Matches typical npm library patterns
-
-**Cons:**
-
-- Slightly more complex workflow
-- Need to ensure parent has correct versions
-
-### Publishing to npm (Future)
-
-When ready to publish this library:
-
-1. Create a git repository
-2. Update package.json with repository URL
-3. Build the library: `npm run build`
-4. Publish: `npm publish`
-5. Update your project to use: `npm install fabric-canvas-kit`
-
-The library is already structured correctly for npm publishing!
+- **TypeScript**: ^5.0.0

@@ -1,6 +1,6 @@
 {
   "name": "fabric-canvas-kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Modern TypeScript wrapper for Fabric.js with RxJS event system, history management, and advanced canvas operations",
   "main": "dist/index.js",
   "module": "dist/index.js",
